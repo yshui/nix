@@ -1292,8 +1292,11 @@ void DerivationBuilderImpl::startBuilder()
                 options.cloneFlags = CLONE_NEWPID | CLONE_NEWNS | CLONE_NEWIPC | CLONE_NEWUTS | CLONE_PARENT | SIGCHLD;
                 if (derivationType->isSandboxed())
                     options.cloneFlags |= CLONE_NEWNET;
-                if (usingUserNamespace)
+                if (usingUserNamespace) {
+                    warn("user namespace enabled, but we weren't able to drop supplementary groups; "
+                        "this can break some builds. consider using the nix daemon.");
                     options.cloneFlags |= CLONE_NEWUSER;
+                }
 
                 pid_t child = startProcess([&]() { runChild(); }, options);
 
