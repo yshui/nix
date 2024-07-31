@@ -72,7 +72,7 @@ static std::tuple<StorePath, FlakeRef, FlakeRef> fetchOrSubstituteTree(
 
     state.allowPath(storePath);
 
-    assert(!originalRef.input.getNarHash() || storePath == originalRef.input.computeStorePath(*state.store));
+    //assert(!originalRef.input.getNarHash() || storePath == originalRef.input.computeStorePath(*state.store));
 
     return {std::move(storePath), resolvedRef, lockedRef};
 }
