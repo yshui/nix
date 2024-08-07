@@ -15,6 +15,21 @@ StorePath fetchToStore(
 {
     // FIXME: add an optimisation for the case where the accessor is
     // a `PosixSourceAccessor` pointing to a store path.
+    auto physicalPath = path.getPhysicalPath();
+    if (physicalPath) {
+        auto pathString = physicalPath->string();
+        if (store.isInStore(pathString) && !filter) {
+            auto storePath = store.toStorePath(pathString);
+            debug(
+                "source path '%s' is potentially already in the store: '%s', '%s'",
+                path,
+                store.printStorePath(storePath.first),
+                storePath.second);
+            if (storePath.second == "") {
+                return storePath.first;
+            }
+        }
+    }
 
     std::optional<fetchers::Cache::Key> cacheKey;
 
