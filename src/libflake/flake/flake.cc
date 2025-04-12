@@ -37,8 +37,6 @@ static StorePath copyInputToStore(
     auto narHash = state.store->queryPathInfo(storePath)->narHash;
     input.attrs.insert_or_assign("narHash", narHash.to_string(HashFormat::SRI, true));
 
-    assert(!originalInput.getNarHash() || storePath == originalInput.computeStorePath(*state.store));
-
     return storePath;
 }
 
